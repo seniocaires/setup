@@ -37,14 +37,14 @@
 			},
 			{
 				"codigo": "copiarlogs",
-				"exec": "cp -R /var/log/* /teste",
+				"exec": "cp -R /var/log/ /teste",
 				"descricao": "Copiar arquivos de log para pasta /teste",
 				"obrigatorio": false
 			},
 			{
 				"codigo": "exibirlogs",
-				"exec": "ls -alh /teste",
-				"descricao": "Exibir conteúdo da pasta /teste",
+				"exec": "ls -alh /teste/log",
+				"descricao": "Exibir conteúdo da pasta /teste/log",
 				"obrigatorio": true
 			}
 		]
