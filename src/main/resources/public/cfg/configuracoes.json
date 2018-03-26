@@ -1,0 +1,77 @@
+[
+	{
+	    "codigo": "1",
+		"nome": "Quem sou eu",
+		"descricao": "Exemplo de configuração",
+		"gruposParametros": [
+			{
+				"descricao": "Dados",
+				"parametros": [
+					{
+						"codigo": "login",
+						"descricao": "Login",
+						"tipo": "text",
+						"keystring": "@login"
+					},
+					{
+						"codigo": "senha",
+						"descricao": "Senha",
+						"tipo": "password",
+						"keystring": "@senha"
+					}
+				]
+			}
+		],
+		"comandos": [
+			{
+				"codigo": "preconfiguracao",
+				"exec": "mkdir -p /teste",
+				"descricao": "Pré-configuração - Criar pasta /teste",
+				"obrigatorio": true
+			},
+			{
+				"codigo": "exibirdados",
+				"exec": "echo \"Oi meu Login é @login e minha senha é @senha\"",
+				"descricao": "Exibir dados de acesso",
+				"obrigatorio": false
+			},
+			{
+				"codigo": "copiarlogs",
+				"exec": "cp -R /var/log/* /teste",
+				"descricao": "Copiar arquivos de log para pasta /teste",
+				"obrigatorio": false
+			},
+			{
+				"codigo": "exibirlogs",
+				"exec": "ls -alh /teste",
+				"descricao": "Exibir conteúdo da pasta /teste",
+				"obrigatorio": true
+			}
+		]
+	},
+	{
+	    "codigo": "2",
+		"nome": "Comandos docker",
+		"descricao": "Exemplos de configuração usando comandos Docker",
+		"comandos": [
+			{
+				"codigo": "version",
+				"exec": "docker -v",
+				"descricao": "Versão do Docker",
+				"obrigatorio": true
+			},
+			{
+				"codigo": "listarcontainers",
+				"exec": "docker container ls -a",
+				"descricao": "Listar todos os containers",
+				"obrigatorio": true
+			},
+			{
+				"codigo": "listarimagens",
+				"exec": "docker image ls",
+				"descricao": "Listar as imagens",
+				"obrigatorio": true
+			}
+		]
+	}
+]
