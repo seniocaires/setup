@@ -1,6 +1,8 @@
 package setup;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -26,6 +28,7 @@ public class Util {
 	static Map<Session, String> mapaUsuarios = new ConcurrentHashMap<>();
 
 	private static List<Configuracao> configuracoes;
+	private static String configuracoesJSon;
 	private static final Type CONFIGURACAO_TYPE = new TypeToken<List<Configuracao>>() {
 	}.getType();
 
@@ -45,11 +48,22 @@ public class Util {
 
 			Gson gson = new Gson();
 			JsonReader jsonReader;
-			jsonReader = new JsonReader(new InputStreamReader(Util.class.getClassLoader().getResourceAsStream("public" + File.separator + "cfg" + File.separator + "configuracoes.json")));
-			configuracoes = gson.fromJson(jsonReader, CONFIGURACAO_TYPE);
+			try {
+				jsonReader = new JsonReader(new InputStreamReader(new FileInputStream(File.separator + "app" + File.separator + "cfg" + File.separator + "configuracoes.json")));
+				configuracoes = gson.fromJson(jsonReader, CONFIGURACAO_TYPE);
+			} catch (FileNotFoundException e) {
+				Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+			}
 		}
 
 		return configuracoes;
+	}
+
+	public static String getConfiguracoesJSon() {
+		if (configuracoesJSon == null) {
+			configuracoesJSon = (new Gson()).toJson(getConfiguracoes(),CONFIGURACAO_TYPE);
+		}
+		return configuracoesJSon;
 	}
 
 	public static Configuracao getConfiguracao(String codigo) {

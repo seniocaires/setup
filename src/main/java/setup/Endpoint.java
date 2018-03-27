@@ -2,6 +2,7 @@ package setup;
 
 import static spark.Spark.init;
 import static spark.Spark.post;
+import static spark.Spark.get;
 import static spark.Spark.staticFiles;
 import static spark.Spark.webSocket;
 
@@ -22,6 +23,17 @@ public class Endpoint {
 
 		webSocket("/socket", WebSocketHandler.class);
 		init();
+
+		get("/configuracoes", "application/json", (request, response) -> {
+
+			if (Util.getConfiguracoes() == null || Util.getConfiguracoes().isEmpty()) {
+				response.status(500);
+				Util.getClienteSocket().sendMessage("Arquivo de configurações não encontrado.");
+				return "";
+			}
+
+			return Util.getConfiguracoesJSon();
+		});
 
 		post("/run", (request, response) -> {
 

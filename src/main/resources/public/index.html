@@ -60,14 +60,14 @@
 		});
 
 		function load(codigoConfiguracaoSelecionada) {
-			var configuracoes = JSON.parse(httpGet(location.protocol + '//' + location.hostname + ":" + location.port + '/cfg/configuracoes.json'));
+			var configuracoes = JSON.parse(httpGet(location.protocol + '//' + location.hostname + ":" + location.port + '/configuracoes'));
 			
 			if (document.getElementById("select-configuracao") != null && document.getElementById("select-configuracao") != undefined) {
 				codigoConfiguracaoSelecionada = document.getElementById("select-configuracao").value;
 			} else {
 				codigoConfiguracaoSelecionada = configuracoes[0].codigo;
 			}
-	
+
 			var html_configuracao = "";
 			html_configuracao += "<input name='configuracao' type='hidden' value='" + codigoConfiguracaoSelecionada + "'>";
 	

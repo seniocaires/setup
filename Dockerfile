@@ -1,3 +1,13 @@
+FROM java:8 AS builder
+
+WORKDIR /app
+
+ADD pom.xml /app/pom.xml
+ADD src /app/src
+
+RUN apt-get update && apt-get install -y maven \
+    && mvn dependency:resolve verify package 
+
 FROM java:8
 
 RUN apt update && \
@@ -7,13 +17,10 @@ RUN apt update && \
     apt update && \
     apt install -y docker-engine
 
-WORKDIR /app
+COPY --from=builder /app/target/setup-jar-with-dependencies.jar /app/run.jar
 
-ADD pom.xml /app/pom.xml
-ADD src /app/src
-
-RUN apt-get update && apt-get install -y maven \
-    && mvn dependency:resolve verify package
+ADD cfg /app/cfg
 
 EXPOSE 4567
-CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-jar", "target/setup-jar-with-dependencies.jar"]
+
+CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-jar", "/app/run.jar"]

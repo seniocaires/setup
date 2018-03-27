@@ -1,6 +1,6 @@
 # setup
 
-Arquivo de configurações em src/main/resources/public/cfg/configuracoes.json
+Arquivo de configurações em cfg/configuracoes.json
 
 
 ```

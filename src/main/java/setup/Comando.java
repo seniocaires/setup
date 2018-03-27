@@ -10,6 +10,8 @@ public class Comando {
 
 	private String descricao;
 
+	private boolean obrigatorio;
+
 	public String getCodigo() {
 		return codigo;
 	}
@@ -38,5 +40,13 @@ public class Comando {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public boolean isObrigatorio() {
+		return obrigatorio;
+	}
+
+	public void setObrigatorio(boolean obrigatorio) {
+		this.obrigatorio = obrigatorio;
 	}
 }
