@@ -1,11 +1,11 @@
-# setup
-
 ### Como testar?
 
 ```
 sudo docker run -d --name setup -v /var/run/docker.sock:/var/run/docker.sock -p 4567:4567 seniocaires/setup
 
 ```
+Acesse: http://localhost:4567
+
 
 ### Como usar minhas próprias configurações?
 
