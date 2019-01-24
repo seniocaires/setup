@@ -27,7 +27,7 @@
 				"codigo": "preconfiguracao",
 				"exec": "mkdir -p /teste",
 				"descricao": "Pré-configuração - Criar pasta /teste",
-				"obrigatorio": true
+				"obrigatorio": false
 			},
 			{
 				"codigo": "exibirdados",
@@ -45,7 +45,7 @@
 				"codigo": "exibirlogs",
 				"exec": "ls -alh /teste/log",
 				"descricao": "Exibir conteúdo da pasta /teste/log",
-				"obrigatorio": true
+				"obrigatorio": false
 			}
 		]
 	},

@@ -1,0 +1,22 @@
+.tty{
+
+	margin: 0 auto;
+	padding-top: 20px;
+	font-size: 15px;
+	font-family: 'Courier New', Courier, monospace;
+    background-color: #000;
+    color: #fff;
+    height: 70vh;
+    overflow: scroll;
+}
+.tty > p{
+    width: 100%;
+    margin: 0;
+    top: 0;
+    left: 1;
+    background-color: #000;
+    white-space: pre;
+}
+.tty p:before{
+	content: "$ ";
+}

@@ -1,0 +1,34 @@
+{
+  "name": "br.com.seniocaires.setup",
+  "version": "1.0.0",
+  "description": "Configuração de ambientes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seniocaires/setup.git"
+  },
+  "keywords": [
+    "setup",
+    "docker",
+    "desenvolvimento",
+    "configuração"
+  ],
+  "author": "Senio Caires",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seniocaires/setup/issues"
+  },
+  "homepage": "https://github.com/seniocaires/setup#readme",
+  "dependencies": {
+    "body-parser": "1.18.3",
+    "express": "4.16.4",
+    "moment": "^2.24.0",
+    "path": "0.12.7",
+    "socket.io": "2.2.0",
+    "socket.io-client": "2.2.0",
+    "utf8bts": "0.0.1"
+  }
+}

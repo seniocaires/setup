@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Setup</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <link href="estilo.css" rel="stylesheet">
+    <link href="terminal.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body class="bg-light">
+
+    <form id="frm-modulos">
+
+        <main role="main" class="container">
+            <div id="configuracao"></div>
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+                <h6 class="border-bottom border-gray pb-2 mb-0">
+                    <button class="btn btn-primary btn-lg btn-block" id="bt-configurar" type="button">Configurar</button>
+                </h6>
+            </div>
+            <div id="tty" class="tty">
+            </div>
+            </div>
+        </main>
+
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+
+        function httpGet(url) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", url, false);
+            xmlHttp.send(null);
+            return xmlHttp.responseText;
+        }
+
+        $(document).ready(function () {
+
+            var socket = io.connect(location.protocol + '//' + location.hostname + ":" + "3001/");
+
+            socket.on("terminal", function (msg) {
+                $('#tty').append("<p>" + msg + "</p>");
+            });
+
+            socket.on("disconnect", function () {
+                socket.open();
+            });
+        });
+
+        $('#bt-configurar').click(function () {
+            $.ajax({
+                url: location.protocol + '//' + location.hostname + ":" + location.port + '/run',
+                type: 'post',
+                data: $('#frm-modulos').serialize(),
+                success: function (data) {
+                }
+            });
+        });
+
+        function load(codigoConfiguracaoSelecionada) {
+            var configuracoes = JSON.parse(httpGet(location.protocol + '//' + location.hostname + ":" + location.port + '/configuracoes'));
+
+            if (document.getElementById("select-configuracao") != null && document.getElementById("select-configuracao") != undefined) {
+                codigoConfiguracaoSelecionada = document.getElementById("select-configuracao").value;
+            } else {
+                codigoConfiguracaoSelecionada = configuracoes[0].codigo;
+            }
+
+            var html_configuracao = "";
+            html_configuracao += "<input name='configuracao' type='hidden' value='" + codigoConfiguracaoSelecionada + "'>";
+
+            // titulo
+            html_configuracao += "<div class='d-flex align-items-center p-3 my-3 text-white-50 bg-gray-dark rounded box-shadow'>";
+            html_configuracao += "<div class='lh-100'>";
+            html_configuracao += "<select class='custom-select d-block w-100' id='select-configuracao' onchange='load(this.value);'>";
+            var configuracao;
+            configuracoes.forEach(function (configuracaoIndex) {
+                var html_configuracao_selecionada = "";
+                if (codigoConfiguracaoSelecionada == configuracaoIndex.codigo) {
+                    html_configuracao_selecionada = "selected";
+                    configuracao = configuracaoIndex;
+                }
+                html_configuracao += "<option value='" + configuracaoIndex.codigo + "' " + html_configuracao_selecionada + "> " + configuracaoIndex.nome + " : " + configuracaoIndex.descricao + " </option>";
+            });
+            html_configuracao += "</select>";
+            html_configuracao += "</div>";
+            html_configuracao += "</div>";
+
+            // modulos
+            if (configuracao.comandos !== undefined) {
+                html_configuracao += "<div class='my-3 p-3 bg-white rounded box-shadow'>";
+                html_configuracao += "<h6 class='border-bottom border-gray pb-2 mb-0' id='divmodulos'>";
+                var html_modulos = "";
+                configuracao.comandos.forEach(function (comando) {
+                    var disabled = "";
+                    var hidden = "";
+                    if (comando.obrigatorio) {
+                        disabled = "disabled='disabled' checked='checked'";
+                        hidden = "<input name='modulos' type='hidden' value='" + comando.codigo + "'>";
+                    }
+
+                    html_modulos += "<div class='custom-control custom-checkbox'>" +
+                        "<input name='modulos' type='checkbox' class='custom-control-input' id='" + comando.codigo + "' value='" + comando.codigo + "' " + disabled + ">" +
+                        hidden +
+                        "<label	class='custom-control-label' for='" + comando.codigo + "'>" + comando.descricao + "</label>" +
+                        "</div>";
+
+                });
+                html_configuracao += html_modulos;
+                html_configuracao += "</div>";
+            }
+
+            // parametros
+            if (configuracao.gruposParametros !== undefined) {
+                html_configuracao += "<div class='my-3 p-3  bg-white rounded box-shadow' id='parametros'>";
+                html_gruposParametros = "";
+                configuracao.gruposParametros.forEach(function (grupo_parametro) {
+
+                    html_gruposParametros += "<h4 class='mb-3'>" + grupo_parametro.descricao + "</h4>";
+                    html_gruposParametros += "<div class='row'>";
+
+                    grupo_parametro.parametros.forEach(function (parametro) {
+                        html_gruposParametros += "<div class='col-md-6 mb-3'>";
+                        html_gruposParametros += "<label for='" + parametro.codigo + "'>" + parametro.descricao + "</label>";
+                        html_gruposParametros += "<input type='" + parametro.tipo + "' class='form-control' id='" + parametro.codigo + "' name='" + parametro.codigo + "' placeholder='' value='' required>";
+                        html_gruposParametros += "<div class='invalid-feedback'>Preencha o " + parametro.descricao + ".</div>";
+                        html_gruposParametros += "</div>";
+                    });
+                    html_gruposParametros += "</div>";
+                });
+                html_configuracao += html_gruposParametros;
+                html_configuracao += "</div>";
+            }
+
+            $('#configuracao').html(html_configuracao);
+
+        }
+        load(null);
+        window.setInterval(function () {
+            var elem = document.getElementById('tty');
+            elem.scrollTop = elem.scrollHeight;
+        }, 1000);
+
+    </script>
+
+</body>
+
+</html>

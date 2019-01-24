@@ -1,5 +1,3 @@
-.classpath
-.project
-/.settings/
-/target/
-
+package-lock.json
+supervisord.log
+/node_modules/
