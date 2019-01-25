@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var fs = require('fs');
 const { execSync } = require('child_process');
+var sync = require('child_process').spawnSync;
 var configuracoes = JSON.parse(fs.readFileSync(path.join(__dirname + '/cfg/configuracoes.json'), 'utf-8'));
 
 String.prototype.replaceAll = String.prototype.replaceAll || function (needle, replacement) {
@@ -69,16 +70,23 @@ app.post('/run', function (request, response) {
                         }
                     }
                 }
-                try {
-                    
-                    console.log(execSync(comandoExec).toString());
 
-                } catch (err) {
-                    console.log(String.fromCharCode.apply(null, new Uint8Array(err.stderr)));
-                    console.log(String.fromCharCode.apply(null, new Uint8Array(err.stdout)));
+                let arrayComandos = comandoExec.split(" ");
+                let programa = arrayComandos[0];
+                arrayComandos.shift();
+                let parametros = [];
+                parametros.push.apply(parametros, arrayComandos);
+                const child = sync(programa, parametros);
+
+                let out = child.stdout.toString('utf8');
+                let error = child.stderr.toString('utf8')
+                if (out) {
+                    console.log(out);
+                }
+                if (error) {
+                    console.log("Ocorreu um erro ao executar o comando. > " + error);
                     response.end();
                 }
-
             }
         }
     }
