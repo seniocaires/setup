@@ -148,11 +148,24 @@
 
         }
         load(null);
+
+        $('#tty').bind('DOMMouseScroll', function (e) {
+            isScrolledToBottom = tty.scrollHeight - tty.clientHeight <= tty.scrollTop + 1
+            return true;
+        });
+
+        //IE, Opera, Safari
+        $('#tty').bind('mousewheel', function (e) {
+            isScrolledToBottom = tty.scrollHeight - tty.clientHeight <= tty.scrollTop + 1
+            return true;
+        });
+
+        var isScrolledToBottom = true;
         var tty = document.getElementById("tty");
-        var seguirScrollbar = setInterval(function () {
-            var isScrolledToBottom = tty.scrollHeight - tty.clientHeight <= tty.scrollTop + 1;
-            if (isScrolledToBottom)
+        window.setInterval(function () {
+            if (isScrolledToBottom) {
                 tty.scrollTop = tty.scrollHeight - tty.clientHeight;
+            }
         }, 1000);
 
     </script>
