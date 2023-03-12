@@ -77,43 +77,55 @@ app.post('/run', function (request, response) {
     }
   }
 
-  for (let modulo of modulos) {
-    for (let comando of configuracao.comandos) {
-      if (comando.codigo == modulo) {
-        console.info('Executando ::: ' + comando.descricao);
-        let comandoExec = comando.exec;
-        if (configuracao.gruposParametros !== undefined) {
-          for (let grupoParametro of configuracao.gruposParametros) {
-            for (let parametro of grupoParametro.parametros) {
-              for (let codigoParametro of Object.keys(request.body)) {
-                if (codigoParametro == parametro.codigo) {
-                  comandoExec = comandoExec.replaceAll(parametro.keystring, request.body[codigoParametro]);
+  let ocorreuErro = false;
+  try {
+    for (let modulo of modulos) {
+      for (let comando of configuracao.comandos) {
+        if (comando.codigo == modulo) {
+          console.info('Executando ::: ' + comando.descricao);
+          let comandoExec = comando.exec;
+          if (configuracao.gruposParametros !== undefined) {
+            for (let grupoParametro of configuracao.gruposParametros) {
+              for (let parametro of grupoParametro.parametros) {
+                for (let codigoParametro of Object.keys(request.body)) {
+                  if (codigoParametro == parametro.codigo) {
+                    comandoExec = comandoExec.replaceAll(parametro.keystring, request.body[codigoParametro]);
+                  }
                 }
               }
             }
           }
-        }
 
-        let arrayComandos = comandoExec.split(' ');
-        let programa = arrayComandos[0];
-        arrayComandos.shift();
-        let parametros = [];
-        parametros.push.apply(parametros, arrayComandos);
-        const child = sync(programa, parametros);
+          let arrayComandos = comandoExec.split(' ');
+          let programa = arrayComandos[0];
+          arrayComandos.shift();
+          let parametros = [];
+          parametros.push.apply(parametros, arrayComandos);
+          const child = sync(programa, parametros, {
+            shell: true}
+          );
 
-        let out = child.stdout.toString('utf8');
-        let error = child.stderr.toString('utf8');
-        if (out) {
-          console.log(out);
-        }
-        if (error) {
-          console.log('Ocorreu um erro ao executar o comando. > ' + error);
-          response.end();
+          let out = child.stdout.toString('utf8');
+          let error = child.stderr.toString('utf8');
+          if (out) {
+            console.log(out);
+          }
+          if (error && child.status !== 0) {
+            throw Error('Ocorreu um erro ao executar o comando. > ' + error);
+          }
         }
       }
     }
+  } catch (error) {
+    ocorreuErro = true;
+    console.log(error);
   }
-  console.info('Concluído');
+
+  if (ocorreuErro) {
+    console.info('Ocorreu um erro.');
+  } else {
+    console.info('Concluído');
+  }
   response.end();
 });
 

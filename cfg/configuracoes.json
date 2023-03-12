@@ -11,13 +11,15 @@
 						"codigo": "login",
 						"descricao": "Login",
 						"tipo": "text",
-						"keystring": "@login"
+						"keystring": "@login",
+						"valorPadrao": ""
 					},
 					{
 						"codigo": "senha",
 						"descricao": "Senha",
 						"tipo": "password",
-						"keystring": "@senha"
+						"keystring": "@senha",
+						"valorPadrao": ""
 					}
 				]
 			}
