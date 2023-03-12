@@ -49,17 +49,17 @@ app.get('/configuracoes', function (request, response) {
 });
 
 app.post('/run', function (request, response) {
-  var modulos = [];
-  var codigoConfiguracao;
+  let modulos = [];
+  let codigoConfiguracao;
 
   if (request.body.modulos === undefined) {
-    console.log('Módulos não selecionados. Selecione os módulos.');
-    response.status(402).send('Selecione os módulos.');
+    console.log('Erro: Módulos não selecionados. Selecione os módulos.');
+    return;
   }
 
   if (request.body.configuracao === undefined) {
-    console.log('Configuração não selecionada. Selecione a configuração.');
-    response.status(402).send('Selecione a configuração.');
+    console.log('Erro: Configuração não selecionada. Selecione a configuração.');
+    return;
   }
 
   codigoConfiguracao = request.body.configuracao;
@@ -74,6 +74,24 @@ app.post('/run', function (request, response) {
     if (configuracaoIndex.codigo == codigoConfiguracao) {
       configuracao = configuracaoIndex;
       break;
+    }
+  }
+
+  if (!configuracao) {
+    console.log('Erro: Configuração selecionada inválida.');
+    return;
+  }
+
+  if (configuracao.gruposParametros) {
+    for (let grupoParametro of configuracao.gruposParametros) {
+      for (let parametro of grupoParametro.parametros) {
+        for (let codigoParametro of Object.keys(request.body)) {
+          if (codigoParametro == parametro.codigo && parametro.obrigatorio && !request.body[codigoParametro]) {
+            console.log('Erro: Preencha o campo obrigatório: ' + parametro.descricao);
+            return;
+          }
+        }
+      }
     }
   }
 
@@ -102,8 +120,8 @@ app.post('/run', function (request, response) {
           let parametros = [];
           parametros.push.apply(parametros, arrayComandos);
           const child = sync(programa, parametros, {
-            shell: true}
-          );
+            shell: true,
+          });
 
           let out = child.stdout.toString('utf8');
           let error = child.stderr.toString('utf8');

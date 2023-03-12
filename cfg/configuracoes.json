@@ -12,14 +12,16 @@
 						"descricao": "Login",
 						"tipo": "text",
 						"keystring": "@login",
-						"valorPadrao": ""
+						"valorPadrao": "",
+						"obrigatorio": true
 					},
 					{
 						"codigo": "senha",
 						"descricao": "Senha",
 						"tipo": "password",
 						"keystring": "@senha",
-						"valorPadrao": ""
+						"valorPadrao": "",
+						"obrigatorio": true
 					}
 				]
 			}
