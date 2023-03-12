@@ -10,7 +10,7 @@ socket.on('disconnect', function () {
     console.log("Desconectado do Servidor Socket.");
 });
 
-var logs = spawn('node', ['/usr/bin/setup/server.js']);
+var logs = spawn('node', [__dirname + '/server.js']);
 
 logs.stdout.on('data', function (data) {
     socket.emit("send", utf8bts(data));
