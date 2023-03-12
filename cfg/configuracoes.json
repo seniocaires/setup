@@ -22,6 +22,15 @@
 						"keystring": "@senha",
 						"valorPadrao": "",
 						"obrigatorio": true
+					},
+					{
+						"codigo": "campoBloqueado",
+						"descricao": "Campo bloqueado",
+						"tipo": "text",
+						"keystring": "@bloqueado",
+						"valorPadrao": "Apenas um campo bloqueado",
+						"obrigatorio": true,
+						"bloqueado": true
 					}
 				]
 			}
@@ -29,8 +38,8 @@
 		"comandos": [
 			{
 				"codigo": "preconfiguracao",
-				"exec": "mkdir -p /teste",
-				"descricao": "Pré-configuração - Criar pasta /teste",
+				"exec": "mkdir -p /tmp/teste",
+				"descricao": "Pré-configuração - Criar pasta /tmp/teste",
 				"obrigatorio": false
 			},
 			{
@@ -41,14 +50,14 @@
 			},
 			{
 				"codigo": "copiarlogs",
-				"exec": "cp -R /var/log/ /teste",
-				"descricao": "Copiar arquivos de log para pasta /teste",
+				"exec": "cp -R /var/log/ /tmp/teste",
+				"descricao": "Copiar arquivos de log para pasta /tmp/teste",
 				"obrigatorio": false
 			},
 			{
 				"codigo": "exibirlogs",
-				"exec": "ls -alh /teste/log",
-				"descricao": "Exibir conteúdo da pasta /teste/log",
+				"exec": "ls -alh /tmp/teste/log",
+				"descricao": "Exibir conteúdo da pasta /tmp/teste/log",
 				"obrigatorio": false
 			}
 		]

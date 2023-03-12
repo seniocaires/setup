@@ -133,8 +133,8 @@
 
                     grupo_parametro.parametros.forEach(function (parametro) {
                         html_gruposParametros += "<div class='col-md-6 mb-3'>";
-                        html_gruposParametros += "<label for='" + parametro.codigo + "'>" + parametro.descricao + (parametro.obrigatorio ? "<span class='obrigatorio'> *</span>" : '') + "</label>";
-                        html_gruposParametros += "<input type='" + parametro.tipo + "' class='form-control' id='" + parametro.codigo + "' name='" + parametro.codigo + "' placeholder='' value='" + (parametro.valorPadrao ? parametro.valorPadrao : '') + "' required>";
+                        html_gruposParametros += "<label for='" + parametro.codigo + "'>" + parametro.descricao + (parametro.obrigatorio === true ? "<span class='obrigatorio'> *</span>" : '') + "</label>";
+                        html_gruposParametros += "<input type='" + parametro.tipo + "' class='form-control' id='" + parametro.codigo + "' name='" + parametro.codigo + "' placeholder='' " + (parametro.bloqueado === true ? 'readonly' : '') + " value='" + (parametro.valorPadrao ? parametro.valorPadrao : '') + "' >";
                         html_gruposParametros += "<div class='invalid-feedback'>Preencha o " + parametro.descricao + ".</div>";
                         html_gruposParametros += "</div>";
                     });
