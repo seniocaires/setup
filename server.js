@@ -45,7 +45,23 @@ app.get('/', function (request, response) {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/configuracoes', function (request, response) {
-  response.sendFile(path.join(__dirname + '/cfg/configuracoes.json'));
+  let arquivoConfiguracoes = JSON.parse(fs.readFileSync(path.join(__dirname + '/cfg/configuracoes.json'), 'utf-8'));
+
+  for (let configuracao of arquivoConfiguracoes) {
+    if (configuracao.gruposParametros) {
+      for (let grupoParametro of configuracao.gruposParametros) {
+        if (grupoParametro.parametros) {
+          for (let parametro of grupoParametro.parametros) {
+            if (parametro.valorOculto === true) {
+              parametro.valorPadrao = '***********';
+            }
+          }
+        }
+      }
+    }
+  }
+
+  response.send(arquivoConfiguracoes);
 });
 
 app.post('/run', function (request, response) {
@@ -107,7 +123,11 @@ app.post('/run', function (request, response) {
               for (let parametro of grupoParametro.parametros) {
                 for (let codigoParametro of Object.keys(request.body)) {
                   if (codigoParametro == parametro.codigo) {
-                    comandoExec = comandoExec.replaceAll(parametro.keystring, request.body[codigoParametro]);
+                    if (parametro.valorOculto === true) {
+                      comandoExec = comandoExec.replaceAll(parametro.keystring, parametro.valorPadrao);
+                    } else {
+                      comandoExec = comandoExec.replaceAll(parametro.keystring, request.body[codigoParametro]);
+                    }
                   }
                 }
               }

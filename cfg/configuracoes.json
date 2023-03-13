@@ -31,6 +31,16 @@
 						"valorPadrao": "Apenas um campo bloqueado",
 						"obrigatorio": true,
 						"bloqueado": true
+					},
+					{
+						"codigo": "campoOculto",
+						"descricao": "Campo com valor Oculto",
+						"tipo": "text",
+						"keystring": "@bloqueado",
+						"valorPadrao": "Este valor não irá aparecer no formulário",
+						"obrigatorio": true,
+						"bloqueado": true,
+						"valorOculto": true
 					}
 				]
 			}
